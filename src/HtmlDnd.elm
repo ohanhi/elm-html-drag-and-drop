@@ -75,7 +75,17 @@ update event model =
     Drop raw ->
       empty
 
+drops : Signal ()
+drops =
+  let
+    justDrops event =
+      case event of
+        Drop _ -> Just ()
+        _ -> Nothing
+  in
+    Signal.filterMap justDrops () rawEvents
 
 dragState : Signal Model
 dragState =
   Signal.foldp update empty rawEvents
+    |> Signal.dropRepeats
