@@ -25,12 +25,11 @@ Elm.Native.HtmlDnd.make = function(localRuntime){
       var obj = {
         'event': eventName,
         'targetKind': event.target.dataset.kind,
-        'targetId': Number(event.target.dataset.id)
+        'targetId': Number(event.target.dataset.id),
+        'targetSlot': (event.target.dataset.slot ?
+                        Maybe.Just(event.target.dataset.slot) :
+                        Maybe.Nothing)
       };
-
-      if (eventName !== 'dragstart') {
-        obj.targetSlot = Number(event.target.dataset.slot);
-      }
 
       return Maybe.Just(obj);
     } else {
@@ -38,11 +37,11 @@ Elm.Native.HtmlDnd.make = function(localRuntime){
     }
   }
 
-  function eventStream(eventName) {
+  function eventStream(node, eventName) {
 
     var stream = NS.input('HtmlDnd.'+eventName, Maybe.Nothing);
 
-    localRuntime.addListener([stream.id], document, eventName, function stream(event){
+    localRuntime.addListener([stream.id], node, eventName, function stream(event){
       localRuntime.notify(stream.id, handler(eventName, event));
     });
 
@@ -51,9 +50,9 @@ Elm.Native.HtmlDnd.make = function(localRuntime){
 
 
   localRuntime.Native.HtmlDnd.values = {
-    dragstart: eventStream('dragstart'),
-    dragover: eventStream('dragover'),
-    drop: eventStream('drop')
+    dragstart: eventStream(node, 'dragstart'),
+    dragover: eventStream(node, 'dragover'),
+    drop: eventStream(node, 'drop')
   };
 
   return localRuntime.Native.HtmlDnd.values;

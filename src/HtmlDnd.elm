@@ -87,7 +87,8 @@ empty =
 type alias Raw =
   { event : String
   , targetKind : String
-  , targetId: Int
+  , targetId : Int
+  , targetSlot : Maybe Int
   }
 
 type Event
@@ -117,7 +118,7 @@ update event model =
         over =
           { id = raw.targetId
           , kind = raw.targetKind
-          , slot = raw.targetSlot
+          , slot = Maybe.withDefault -1 raw.targetSlot
           }
       in
         { model | to = Just over }
