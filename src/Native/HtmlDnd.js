@@ -41,7 +41,7 @@ Elm.Native.HtmlDnd.make = function(localRuntime){
 
     var stream = NS.input('HtmlDnd.'+eventName, Maybe.Nothing);
 
-    localRuntime.addListener([stream.id], node, eventName, function stream(event){
+    localRuntime.addListener([stream.id], node, eventName, function streamListener(event){
       localRuntime.notify(stream.id, handler(eventName, event));
     });
 
