@@ -18,10 +18,24 @@ renderDragState dragState =
 
 view dragState =
   div
-    (dropzone "main" 0 0)
+    (dropzone "main" 0 0
+    ++
+    [ style
+      [ ("background", "#ccc")
+      , ("width", "300px")
+      , ("height", "400px")
+      ]
+    ])
     [ div
-        (draggable "box" 1)
-        [ text "Box" ]
+        (draggable "box" 1
+        ++
+        [ style
+          [ ("background", "#cfc")
+          , ("width", "100px")
+          , ("height", "100px")
+          ]
+        ])
+        [ text "Drag me" ]
     , renderDragState dragState
     ]
 
