@@ -12,9 +12,7 @@ Elm.Native.HtmlDnd.make = function(localRuntime){
   var NS = Elm.Native.Signal.make(localRuntime);
   var Maybe = Elm.Maybe.make(localRuntime);
 
-  var node = localRuntime.isFullscreen()
-    ? document
-    : localRuntime.node;
+  var node = localRuntime.isFullscreen() ? document : localRuntime.node;
 
 
   function handler(eventName, event) {
@@ -23,12 +21,11 @@ Elm.Native.HtmlDnd.make = function(localRuntime){
       event.target.dataset.id) {
 
       var obj = {
-        'event': eventName,
-        'targetKind': event.target.dataset.kind,
-        'targetId': Number(event.target.dataset.id),
-        'targetSlot': (event.target.dataset.slot ?
-                        Maybe.Just(event.target.dataset.slot) :
-                        Maybe.Nothing)
+        'kind': event.target.dataset.kind,
+        'id': Number(event.target.dataset.id),
+        'slot': ('slot' in event.target.dataset ?
+                  Maybe.Just(Number(event.target.dataset.slot)) :
+                  Maybe.Nothing)
       };
 
       return Maybe.Just(obj);
@@ -51,7 +48,7 @@ Elm.Native.HtmlDnd.make = function(localRuntime){
 
   localRuntime.Native.HtmlDnd.values = {
     dragstart: eventStream(node, 'dragstart'),
-    dragover: eventStream(node, 'dragover'),
+    dragenter: eventStream(node, 'dragenter'),
     drop: eventStream(node, 'drop')
   };
 

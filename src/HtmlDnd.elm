@@ -65,7 +65,7 @@ type alias Dragged =
 type alias Dropzone =
   { kind : String
   , id : Int
-  , slot : Int
+  , slot : Maybe Int
   }
 
 {-| Model of the drag state.
@@ -85,10 +85,9 @@ empty =
 
 
 type alias Raw =
-  { event : String
-  , targetKind : String
-  , targetId : Int
-  , targetSlot : Maybe Int
+  { kind : String
+  , id : Int
+  , slot : Maybe Int
   }
 
 type Event
@@ -107,8 +106,8 @@ update event model =
     Start raw ->
       let
         dragged =
-          { id = raw.targetId
-          , kind = raw.targetKind
+          { id = raw.id
+          , kind = raw.kind
           }
       in
         { empty | dragged = Just dragged }
@@ -116,9 +115,9 @@ update event model =
     Over raw ->
       let
         over =
-          { id = raw.targetId
-          , kind = raw.targetKind
-          , slot = Maybe.withDefault -1 raw.targetSlot
+          { id = raw.id
+          , kind = raw.kind
+          , slot = raw.slot
           }
       in
         { model | to = Just over }
@@ -126,14 +125,13 @@ update event model =
     Drop raw ->
       empty
 
-
 -- SIGNALS
 
 rawEvents : Signal Event
 rawEvents =
   Signal.mergeMany
     [ Signal.map Start Native.HtmlDnd.dragstart
-    , Signal.map Over Native.HtmlDnd.dragover
+    , Signal.map Over Native.HtmlDnd.dragenter
     , Signal.map Drop Native.HtmlDnd.drop
     ]
 
