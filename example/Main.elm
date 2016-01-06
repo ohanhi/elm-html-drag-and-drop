@@ -8,8 +8,8 @@ renderDragState dragState =
   div
     [ style
       [ ("position", "absolute")
-      , ("right", "0")
-      , ("top", "0")
+      , ("left", "0")
+      , ("bottom", "0")
       , ("padding", "1em")
       , ("background", "#eee")
       ]
@@ -21,12 +21,14 @@ view dragState =
     (dropzone "main" 0 0
     ++
     [ style
-      [ ("background", "#ccc")
-      , ("width", "300px")
-      , ("height", "400px")
+      [ ("display", "flex")
+      , ("flex-direction", "row")
       ]
     ])
     [ div
+      (dropzone "column1" 0 0
+      ++ columnStyles)
+      [ div
         (draggable "box" 1
         ++
         [ style
@@ -36,8 +38,23 @@ view dragState =
           ]
         ])
         [ text "Drag me" ]
+      ]
+    , div
+      (dropzone "column2" 0 0
+      ++ columnStyles)
+      []
     , renderDragState dragState
     ]
 
 main =
   Signal.map view dragState
+
+
+columnStyles =
+  [ style
+    [ ("border", "solid #ccc")
+    , ("width", "300px")
+    , ("height", "400px")
+    , ("flex", "1")
+    ]
+  ]
